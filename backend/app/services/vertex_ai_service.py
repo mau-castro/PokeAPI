@@ -17,6 +17,19 @@ from app.core.config import settings
 class VertexAIService:
     """Service facade for Gemini model interactions."""
 
+    _LOCAL_RECOMMENDATION_POOL = [
+        "Garchomp",
+        "Dragonite",
+        "Lucario",
+        "Gyarados",
+        "Togekiss",
+        "Magnezone",
+        "Excadrill",
+        "Rotom-Wash",
+        "Scizor",
+        "Aegislash",
+    ]
+
     @staticmethod
     def _build_endpoint(path_suffix: str) -> str:
         base_url = "https://generativelanguage.googleapis.com/v1beta"
@@ -66,6 +79,43 @@ class VertexAIService:
             return json.loads(match.group(0))
         except json.JSONDecodeError:
             return None
+
+    @classmethod
+    def _build_local_fallback_recommendations(
+        cls,
+        favorite_names: List[str],
+        language: str,
+        provider_error: str,
+    ) -> Dict[str, Any]:
+        favorite_set = {name.lower().strip() for name in favorite_names if name.strip()}
+
+        selected = [
+            name
+            for name in cls._LOCAL_RECOMMENDATION_POOL
+            if name.lower() not in favorite_set
+        ][:5]
+
+        if len(selected) < 5:
+            selected = cls._LOCAL_RECOMMENDATION_POOL[:5]
+
+        if language == "en":
+            reason_template = "Strong all-around option that usually complements balanced favorites."
+            summary = (
+                "Using local fallback recommendations because Gemini quota is temporarily exhausted. "
+                "Please retry in a few seconds."
+            )
+        else:
+            reason_template = "Opcion solida y versatil que suele complementar favoritos equilibrados."
+            summary = (
+                "Usando recomendaciones locales porque la cuota de Gemini esta temporalmente agotada. "
+                "Intenta de nuevo en unos segundos."
+            )
+
+        return {
+            "suggestions": [{"name": name, "reason": reason_template} for name in selected],
+            "summary": summary,
+            "raw_response": provider_error,
+        }
 
     @classmethod
     def analyze_pokemon_image(
@@ -155,7 +205,17 @@ class VertexAIService:
         )
 
         contents = [{"role": "user", "parts": [{"text": prompt}]}]
-        text_output = cls._call_generate_content(contents)
+        try:
+            text_output = cls._call_generate_content(contents)
+        except RuntimeError as exc:
+            error_text = str(exc)
+            if "Vertex API error 429" in error_text or "RESOURCE_EXHAUSTED" in error_text:
+                return cls._build_local_fallback_recommendations(
+                    favorite_names,
+                    language,
+                    error_text,
+                )
+            raise
         parsed = cls._extract_json_block(text_output) or {}
 
         parsed_suggestions = parsed.get("suggestions", [])

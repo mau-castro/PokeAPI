@@ -3,6 +3,8 @@
  */
 
 import React, { useEffect, useState } from 'react'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import { aiService } from '../services/api'
 import { useLanguage } from '../context/LanguageContext'
 import { translations } from '../i18n/translations'
@@ -20,6 +22,47 @@ const GeminiSparkIcon = () => (
   >
     <path d="M12 2.5l1.9 5.2 5.6 1.9-5.6 1.9L12 16.7l-1.9-5.2-5.6-1.9 5.6-1.9L12 2.5Z" />
   </svg>
+)
+
+const MarkdownMessage = ({ content }) => (
+  <ReactMarkdown
+    remarkPlugins={[remarkGfm]}
+    components={{
+      p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+      ul: ({ children }) => <ul className="list-disc pl-5 mb-2">{children}</ul>,
+      ol: ({ children }) => <ol className="list-decimal pl-5 mb-2">{children}</ol>,
+      li: ({ children }) => <li className="mb-1">{children}</li>,
+      code: ({ inline, children }) =>
+        inline ? (
+          <code className="px-1 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-xs">{children}</code>
+        ) : (
+          <code className="block p-3 rounded-lg bg-slate-100 dark:bg-slate-800 overflow-x-auto text-xs">{children}</code>
+        ),
+      pre: ({ children }) => <pre className="mb-2">{children}</pre>,
+      a: ({ href, children }) => (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline text-blue-600 dark:text-blue-400"
+        >
+          {children}
+        </a>
+      ),
+      blockquote: ({ children }) => (
+        <blockquote className="border-l-4 border-slate-300 dark:border-slate-600 pl-3 italic mb-2">
+          {children}
+        </blockquote>
+      ),
+      strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+      em: ({ children }) => <em className="italic">{children}</em>,
+      h1: ({ children }) => <h3 className="text-base font-bold mb-2">{children}</h3>,
+      h2: ({ children }) => <h4 className="text-sm font-bold mb-2">{children}</h4>,
+      h3: ({ children }) => <h5 className="text-sm font-semibold mb-2">{children}</h5>,
+    }}
+  >
+    {content || ''}
+  </ReactMarkdown>
 )
 
 export const AIBonusPanel = ({ section = 'all' }) => {
@@ -220,7 +263,13 @@ export const AIBonusPanel = ({ section = 'all' }) => {
                     <p className={`text-xs mb-1 font-semibold ${isUser ? 'text-blue-100' : 'text-gray-500 dark:text-slate-400'}`}>
                       {isUser ? chatUi.you : chatUi.assistant}
                     </p>
-                    <p className="text-sm whitespace-pre-wrap leading-relaxed">{item.content}</p>
+                    {isUser ? (
+                      <p className="text-sm whitespace-pre-wrap leading-relaxed">{item.content}</p>
+                    ) : (
+                      <div className="text-sm leading-relaxed">
+                        <MarkdownMessage content={item.content} />
+                      </div>
+                    )}
                   </div>
                 </div>
               )
@@ -344,9 +393,16 @@ export const AIBonusPanel = ({ section = 'all' }) => {
               <p className="text-xs text-gray-500 dark:text-slate-400">{t.aiSections.contextChatEmpty}</p>
             ) : (
               chatHistory.map((item, index) => (
-                <p key={`${item.role}-${index}`} className="text-sm mb-2 text-gray-800 dark:text-slate-100">
-                  <strong>{item.role === 'user' ? (isSpanish ? 'Tu' : 'You') : 'PokeAssistant'}:</strong> {item.content}
-                </p>
+                <div key={`${item.role}-${index}`} className="text-sm mb-2 text-gray-800 dark:text-slate-100">
+                  <strong>{item.role === 'user' ? (isSpanish ? 'Tu' : 'You') : 'PokeAssistant'}:</strong>{' '}
+                  {item.role === 'user' ? (
+                    <span>{item.content}</span>
+                  ) : (
+                    <div className="mt-1 leading-relaxed">
+                      <MarkdownMessage content={item.content} />
+                    </div>
+                  )}
+                </div>
               ))
             )}
           </div>

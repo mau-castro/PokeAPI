@@ -101,6 +101,24 @@ _COMMON_OFFTOPIC_TERMS = {
 }
 
 
+def _is_quota_exhausted_error(exc: Exception) -> bool:
+    error_text = str(exc)
+    return "Vertex API error 429" in error_text or "RESOURCE_EXHAUSTED" in error_text
+
+
+def _quota_disclaimer(language: str = "es") -> str:
+    if language == "en":
+        return (
+            "Gemini quota exceeded (token/request limit). "
+            "Please try again in a few moments."
+        )
+
+    return (
+        "Cuota de Gemini superada (limite de tokens/solicitudes). "
+        "Intenta nuevamente en unos momentos."
+    )
+
+
 def _normalize_text(value: str) -> str:
     lowered = (value or "").lower().strip()
     return re.sub(r"\s+", " ", lowered)
@@ -184,7 +202,15 @@ async def analyze_image(
         return analysis
     except ValueError as exc:
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(exc))
-    except Exception:
+    except Exception as exc:
+        if _is_quota_exhausted_error(exc):
+            target_language = "en" if language.lower().strip() == "en" else "es"
+            return {
+                "detected_pokemon": None,
+                "characteristics": [],
+                "confidence_note": _quota_disclaimer(target_language),
+                "raw_response": str(exc),
+            }
         raise HTTPException(
             status_code=status.HTTP_502_BAD_GATEWAY,
             detail="AI provider failed to analyze the image",
@@ -216,6 +242,14 @@ def chat_with_ai(
     except ValueError as exc:
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(exc))
     except Exception as exc:
+        if _is_quota_exhausted_error(exc):
+            fallback_reply = _quota_disclaimer("en" if re.search(r"\b(hello|hi|thanks|please|what|how)\b", payload.message.lower()) else "es")
+            ContextService.add_turn(db, user_id, session_id, "assistant", fallback_reply)
+            return {
+                "session_id": session_id,
+                "reply": fallback_reply,
+                "context_size": ContextService.get_context_size(db, user_id, session_id),
+            }
         import traceback
         traceback.print_exc()
         raise HTTPException(
@@ -250,10 +284,10 @@ def ai_recommendations(
         )
     except ValueError as exc:
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(exc))
-    except Exception:
+    except Exception as exc:
         raise HTTPException(
             status_code=status.HTTP_502_BAD_GATEWAY,
-            detail="AI provider failed to generate recommendations",
+            detail=f"AI provider failed to generate recommendations: {exc}",
         )
 
     return result
