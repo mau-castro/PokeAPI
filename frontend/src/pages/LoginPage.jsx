@@ -8,6 +8,7 @@ import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useLanguage } from '../context/LanguageContext'
+import { useTheme } from '../context/ThemeContext'
 import { translations } from '../i18n/translations'
 
 export const LoginPage = () => {
@@ -19,6 +20,7 @@ export const LoginPage = () => {
   const [loading, setLoading] = useState(false)
   const { login } = useAuth()
   const { language } = useLanguage()
+  const { isDark } = useTheme()
   const t = translations[language]
   const navigate = useNavigate()
 
@@ -46,10 +48,14 @@ export const LoginPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 to-blue-50 flex items-center justify-center px-4 py-12">
+    <div
+      className={`min-h-screen flex items-center justify-center px-4 py-12 transition-colors ${
+        isDark ? 'bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800' : 'bg-gradient-to-br from-red-50 to-blue-50'
+      }`}
+    >
       <div className="w-full max-w-md">
         {/* Card */}
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div className="bg-white dark:bg-slate-900 rounded-xl shadow-lg overflow-hidden border border-transparent dark:border-slate-700/70">
           {/* Header */}
           <div className="bg-gradient-to-r from-red-600 to-red-700 px-6 py-8">
             <h1 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
@@ -62,15 +68,15 @@ export const LoginPage = () => {
           {/* Form */}
           <div className="px-6 py-8">
             {error && (
-              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-                <p className="text-red-800 font-medium">{error}</p>
+              <div className="mb-6 p-4 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-700/60 rounded-lg">
+                <p className="text-red-800 dark:text-red-200 font-medium">{error}</p>
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Email Field */}
               <div>
-                <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
+                <label htmlFor="email" className="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-2">
                   {t.login.email}
                 </label>
                 <input
@@ -81,13 +87,13 @@ export const LoginPage = () => {
                   onChange={handleChange}
                   required
                   placeholder="your@email.com"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 placeholder:text-gray-500 dark:placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
                 />
               </div>
 
               {/* Password Field */}
               <div>
-                <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
+                <label htmlFor="password" className="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-2">
                   {t.login.password}
                 </label>
                 <input
@@ -98,7 +104,7 @@ export const LoginPage = () => {
                   onChange={handleChange}
                   required
                   placeholder="••••••••"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 placeholder:text-gray-500 dark:placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
                 />
               </div>
 
@@ -114,7 +120,7 @@ export const LoginPage = () => {
 
             {/* Footer */}
             <div className="mt-6 text-center">
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-slate-300">
                 {t.login.noAccount}{' '}
                 <Link to="/register" className="text-red-600 font-semibold hover:text-red-700 transition">
                   {t.login.createOne}
@@ -125,8 +131,8 @@ export const LoginPage = () => {
         </div>
 
         {/* Demo Info */}
-        <div className="mt-6 bg-white rounded-lg shadow px-6 py-4 text-center">
-          <p className="text-sm text-gray-600">
+        <div className="mt-6 bg-white dark:bg-slate-900 rounded-lg shadow px-6 py-4 text-center border border-transparent dark:border-slate-700/70">
+          <p className="text-sm text-gray-600 dark:text-slate-300">
             {t.login.demoInfo}
           </p>
         </div>
