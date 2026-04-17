@@ -193,11 +193,13 @@ export const aiService = {
   /**
    * Analiza una imagen Pokemon con modelo multimodal.
    * @param {File} imageFile - Archivo de imagen a analizar
+   * @param {string} language - Idioma de salida esperado (es|en)
    * @returns {Promise} Resultado del analisis
    */
-  analyzeImage: async (imageFile) => {
+  analyzeImage: async (imageFile, language = 'es') => {
     const formData = new FormData()
     formData.append('image', imageFile)
+    formData.append('language', language)
 
     const response = await apiClient.post('/ai/analyze-image', formData, {
       headers: {

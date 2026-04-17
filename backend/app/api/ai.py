@@ -154,6 +154,7 @@ def _domain_restriction_message(message: str) -> str:
 async def analyze_image(
     image: UploadFile = File(...),
     note: str = Form(default=""),
+    language: str = Form(default="es"),
     current_user=Depends(get_current_user),
 ):
     if not image.content_type or not image.content_type.startswith("image/"):
@@ -171,7 +172,13 @@ async def analyze_image(
         )
 
     try:
-        analysis = VertexAIService.analyze_pokemon_image(image_bytes, image.content_type)
+        normalized_language = language.lower().strip()
+        target_language = "en" if normalized_language == "en" else "es"
+        analysis = VertexAIService.analyze_pokemon_image(
+            image_bytes,
+            image.content_type,
+            target_language,
+        )
         if note:
             analysis["confidence_note"] = f"{analysis.get('confidence_note', '')} {note}".strip()
         return analysis

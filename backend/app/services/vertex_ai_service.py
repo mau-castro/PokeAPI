@@ -68,11 +68,18 @@ class VertexAIService:
             return None
 
     @classmethod
-    def analyze_pokemon_image(cls, image_bytes: bytes, mime_type: str) -> Dict[str, Any]:
+    def analyze_pokemon_image(
+        cls,
+        image_bytes: bytes,
+        mime_type: str,
+        language: str = "es",
+    ) -> Dict[str, Any]:
+        target_language = "English" if language == "en" else "Spanish"
         prompt = (
             "Analyze this Pokemon-related image. "
             "Return JSON with keys: detected_pokemon (string or null), "
-            "characteristics (array of strings), confidence_note (string)."
+            "characteristics (array of strings), confidence_note (string). "
+            f"Write all textual values in {target_language}."
         )
 
         encoded_image = base64.b64encode(image_bytes).decode("utf-8")
