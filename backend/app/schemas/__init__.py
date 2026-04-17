@@ -124,8 +124,14 @@ class AIChatResponse(BaseModel):
     context_size: int
 
 
+class AIRecommendationItem(BaseModel):
+    """Elemento de recomendacion con explicacion."""
+    name: str
+    reason: str
+
+
 class AIRecommendationsResponse(BaseModel):
     """Respuesta de recomendaciones inteligentes."""
-    suggestions: list[str] = []
+    suggestions: list[AIRecommendationItem] = []
     summary: str = ""
     raw_response: str = ""

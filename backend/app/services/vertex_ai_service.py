@@ -136,19 +136,75 @@ class VertexAIService:
 
     @classmethod
     def generate_recommendations(cls, favorite_names: List[str]) -> Dict[str, Any]:
+        return cls.generate_recommendations_with_language(favorite_names, "es")
+
+    @classmethod
+    def generate_recommendations_with_language(
+        cls,
+        favorite_names: List[str],
+        language: str = "es",
+    ) -> Dict[str, Any]:
+        target_language = "English" if language == "en" else "Spanish"
         prompt = (
             "Given this favorite Pokemon list: "
             f"{', '.join(favorite_names) if favorite_names else 'none'}. "
-            "Suggest 5 Pokemon to add next and explain briefly in Spanish. "
-            "Return JSON with keys: suggestions (array), summary (string)."
+            "Suggest 5 Pokemon to add next, each with a clear reason tied to the favorites pattern. "
+            f"Write all text in {target_language}. "
+            "Return strict JSON with keys: "
+            "suggestions (array of objects with name and reason), summary (string)."
         )
 
         contents = [{"role": "user", "parts": [{"text": prompt}]}]
         text_output = cls._call_generate_content(contents)
         parsed = cls._extract_json_block(text_output) or {}
 
+        parsed_suggestions = parsed.get("suggestions", [])
+        normalized_suggestions: List[dict] = []
+
+        if isinstance(parsed_suggestions, list):
+            for item in parsed_suggestions:
+                if isinstance(item, dict):
+                    name = str(item.get("name") or item.get("pokemon") or "").strip()
+                    reason = str(item.get("reason") or item.get("why") or "").strip()
+                    if name and reason:
+                        normalized_suggestions.append({"name": name, "reason": reason})
+                elif isinstance(item, str):
+                    raw_item = item.strip()
+                    if not raw_item:
+                        continue
+                    if ":" in raw_item:
+                        name, reason = raw_item.split(":", 1)
+                        normalized_suggestions.append(
+                            {"name": name.strip(), "reason": reason.strip()}
+                        )
+                    else:
+                        default_reason = (
+                            "Encaja con tu estilo de favoritos."
+                            if language != "en"
+                            else "It matches your favorites pattern."
+                        )
+                        normalized_suggestions.append(
+                            {"name": raw_item, "reason": default_reason}
+                        )
+
+        if not normalized_suggestions:
+            fallback_reason = (
+                "Sin suficientes favoritos para un patron preciso; es una opcion versatil."
+                if language != "en"
+                else "Not enough favorites for a precise pattern yet; this is a versatile option."
+            )
+            normalized_suggestions = [
+                {"name": "Pikachu", "reason": fallback_reason},
+                {"name": "Lucario", "reason": fallback_reason},
+                {"name": "Gyarados", "reason": fallback_reason},
+                {"name": "Garchomp", "reason": fallback_reason},
+                {"name": "Dragonite", "reason": fallback_reason},
+            ]
+
+        summary = str(parsed.get("summary") or "").strip() or text_output
+
         return {
-            "suggestions": parsed.get("suggestions", []),
-            "summary": parsed.get("summary", text_output),
+            "suggestions": normalized_suggestions[:5],
+            "summary": summary,
             "raw_response": text_output,
         }

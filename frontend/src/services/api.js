@@ -225,10 +225,13 @@ export const aiService = {
 
   /**
    * Genera recomendaciones segun favoritos del usuario.
+   * @param {string} language - Idioma de salida esperado (es|en)
    * @returns {Promise} Recomendaciones inteligentes
    */
-  getRecommendations: async () => {
-    const response = await apiClient.get('/ai/recommendations')
+  getRecommendations: async (language = 'es') => {
+    const response = await apiClient.get('/ai/recommendations', {
+      params: { language },
+    })
     return response.data
   },
 }

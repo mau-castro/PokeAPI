@@ -8,7 +8,7 @@ and collection-based recommendations.
 import re
 from uuid import uuid4
 
-from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, status
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, UploadFile, status
 from sqlalchemy.orm import Session
 
 from app.api.auth import get_current_user
@@ -236,13 +236,18 @@ def chat_with_ai(
 @router.get("/recommendations", response_model=AIRecommendationsResponse)
 def ai_recommendations(
     db: Session = Depends(get_db),
+    language: str = Query(default="es"),
     current_user=Depends(get_current_user),
 ):
     favorites = FavoriteService.get_user_favorites(db, int(current_user.id), limit=100, offset=0)
     favorite_names = [item.pokemon_name for item in favorites]
+    target_language = "en" if language.lower().strip() == "en" else "es"
 
     try:
-        result = VertexAIService.generate_recommendations(favorite_names)
+        result = VertexAIService.generate_recommendations_with_language(
+            favorite_names,
+            target_language,
+        )
     except ValueError as exc:
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(exc))
     except Exception:

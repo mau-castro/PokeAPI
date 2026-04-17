@@ -33,6 +33,24 @@ export const AIBonusPanel = ({ section = 'all' }) => {
   const [recommendationsLoading, setRecommendationsLoading] = useState(false)
   const [recommendationsError, setRecommendationsError] = useState('')
 
+  const recommendUi = isSpanish
+    ? {
+        title: '3) Recomendaciones inteligentes',
+        action: 'Generar recomendaciones',
+        loading: 'Generando...',
+        failed: 'No se pudieron generar recomendaciones.',
+        summary: 'Resumen',
+        because: 'Por que te lo recomiendo',
+      }
+    : {
+        title: '3) Smart recommendations',
+        action: 'Generate recommendations',
+        loading: 'Generating...',
+        failed: 'Failed to generate recommendations.',
+        summary: 'Summary',
+        because: 'Why I recommend it',
+      }
+
   useEffect(() => {
     if (!imageFile) {
       setImagePreviewUrl('')
@@ -135,10 +153,10 @@ export const AIBonusPanel = ({ section = 'all' }) => {
     try {
       setRecommendationsLoading(true)
       setRecommendationsError('')
-      const result = await aiService.getRecommendations()
+      const result = await aiService.getRecommendations(language)
       setRecommendations(result)
     } catch (error) {
-      setRecommendationsError(error.response?.data?.detail || 'No se pudieron generar recomendaciones.')
+      setRecommendationsError(error.response?.data?.detail || recommendUi.failed)
     } finally {
       setRecommendationsLoading(false)
     }
@@ -339,26 +357,40 @@ export const AIBonusPanel = ({ section = 'all' }) => {
 
       {showRecommend && (
       <div className={`${showAnalysis || showChat ? 'mt-6' : ''} border border-gray-200 dark:border-slate-700 rounded-lg p-4`}>
-        <h4 className="font-semibold text-gray-900 dark:text-slate-100 mb-3">3) Recomendaciones inteligentes</h4>
+        <h4 className="font-semibold text-gray-900 dark:text-slate-100 mb-3">{recommendUi.title}</h4>
         <button
           type="button"
           onClick={handleRecommendations}
           disabled={recommendationsLoading}
           className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-60"
         >
-          {recommendationsLoading ? 'Generando...' : 'Generar recomendaciones'}
+          {recommendationsLoading ? recommendUi.loading : recommendUi.action}
         </button>
 
         {recommendationsError && <p className="mt-3 text-sm text-red-700">{recommendationsError}</p>}
 
         {recommendations && (
           <div className="mt-4 text-sm text-gray-700 dark:text-slate-200">
-            <p className="mb-2"><strong>Resumen:</strong> {recommendations.summary}</p>
-            <ul className="list-disc pl-5">
+            <p className="mb-4"><strong>{recommendUi.summary}:</strong> {recommendations.summary}</p>
+
+            <div className="grid sm:grid-cols-2 gap-3">
               {(recommendations.suggestions || []).map((item, index) => (
-                <li key={`${item}-${index}`}>{item}</li>
+                <article
+                  key={`${item.name || 'pokemon'}-${index}`}
+                  className="rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-3"
+                >
+                  <h5 className="text-base font-bold text-gray-900 dark:text-slate-100 mb-1 capitalize">
+                    {item.name || 'Pokemon'}
+                  </h5>
+                  <p className="text-xs uppercase tracking-wide text-emerald-600 font-semibold mb-1">
+                    {recommendUi.because}
+                  </p>
+                  <p className="text-sm text-gray-700 dark:text-slate-300">
+                    {item.reason || ''}
+                  </p>
+                </article>
               ))}
-            </ul>
+            </div>
           </div>
         )}
       </div>
