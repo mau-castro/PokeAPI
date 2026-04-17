@@ -186,4 +186,49 @@ export const favoriteService = {
   },
 }
 
+/**
+ * Endpoints de AI bonus
+ */
+export const aiService = {
+  /**
+   * Analiza una imagen Pokemon con modelo multimodal.
+   * @param {File} imageFile - Archivo de imagen a analizar
+   * @returns {Promise} Resultado del analisis
+   */
+  analyzeImage: async (imageFile) => {
+    const formData = new FormData()
+    formData.append('image', imageFile)
+
+    const response = await apiClient.post('/ai/analyze-image', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    return response.data
+  },
+
+  /**
+   * Chat con contexto persistido por sesion.
+   * @param {string} message - Mensaje del usuario
+   * @param {string|null} sessionId - ID de sesion de chat
+   * @returns {Promise} Respuesta del asistente
+   */
+  chat: async (message, sessionId = null) => {
+    const response = await apiClient.post('/ai/chat', {
+      message,
+      session_id: sessionId,
+    })
+    return response.data
+  },
+
+  /**
+   * Genera recomendaciones segun favoritos del usuario.
+   * @returns {Promise} Recomendaciones inteligentes
+   */
+  getRecommendations: async () => {
+    const response = await apiClient.get('/ai/recommendations')
+    return response.data
+  },
+}
+
 export default apiClient

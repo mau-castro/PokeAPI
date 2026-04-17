@@ -17,7 +17,7 @@
 ## ✨ Características
 
 ### Funcionalidad Core
-- ✅ **Autenticación de Usuarios**: JWT seguro con hashing bcrypt
+- ✅ **Autenticación de Usuarios**: JWT seguro con hashing Argon2
 - ✅ **Búsqueda de Pokémon**: Por nombre o ID con información detallada
 - ✅ **Gestión de Favoritos**: Crea y administra tu colección personal
 - ✅ **Diseño Responsivo**: UI moderna con Tailwind CSS
@@ -29,6 +29,7 @@
 - ✅ **Clean Code**: Funciones pequeñas, nombres descriptivos, docstrings
 - ✅ **Manejo de Errores**: Validación robusta en API y frontend
 - ✅ **CORS Configurado**: Listo para comunicación frontend-backend
+- ✅ **IA con Vertex/Gemini**: Chat, análisis y recomendaciones con `gemini-2.5-flash-lite`
 
 ## 🛠️ Stack Tecnológico
 
@@ -36,9 +37,11 @@
 - **Framework**: FastAPI (Python 3.11)
 - **BD**: MySQL 8.0 con SQLAlchemy ORM
 - **Autenticación**: JWT (python-jose)
-- **Hash de Contraseña**: Bcrypt (passlib)
+- **Hash de Contraseña**: Argon2 
 - **Servidor**: Uvicorn ASGI
 - **HTTP Async**: httpx para llamadas a PokéAPI
+- **IA Generativa**: Vertex/Gemini REST API (`generativelanguage.googleapis.com`)
+- **Modelo IA por defecto**: `gemini-2.5-flash-lite`
 
 ### Frontend
 - **Framework**: React 18.2.0
@@ -171,13 +174,15 @@ ACCESS_TOKEN_EXPIRE_MINUTES=30
 # PokéAPI
 POKEAPI_BASE_URL=https://pokeapi.co/api/v2
 
-# Opcional: Claude AI
-CLAUDE_API_KEY=tu-clave-claude
-CLAUDE_MODEL=claude-3-5-sonnet-20241022
+# IA (requerido para PokeChat, PokeAnalysis y PokeRecommend)
+VERTEX_API_KEY=tu-api-key-de-google
+VERTEX_MODEL=gemini-2.5-flash-lite
 
 # Producción
 DEBUG=False
 ```
+
+Si `VERTEX_API_KEY` no está configurada o es inválida, las funciones de IA devolverán error.
 
 ### Frontend (.env)
 ```env
@@ -402,52 +407,6 @@ docker-compose down
 docker-compose down -v
 ```
 
-## 🧹 Calidad de Código
-
-### Clean Code ✨
-- ✅ **Nombres significativos**: `create_user()` no `cu()`
-- ✅ **Funciones pequeñas**: < 20 líneas cada una
-- ✅ **Docstrings**: Toda función documentada
-- ✅ **DRY**: Sin código duplicado
-- ✅ **Type hints**: Todo typado
-
-### Ejemplo Real
-
-```python
-# ❌ MALO
-def cu(u, e, p):
-    if len(p) < 8:
-        return None
-    h = hash(p)
-    return create_in_db(u, e, h)
-
-# ✅ BIEN
-def create_user(
-    username: str, 
-    email: str, 
-    password: str
-) -> User:
-    """
-    Crea un nuevo usuario con contraseña hasheada.
-    
-    Args:
-        username: Nombre de usuario (3-50 caracteres)
-        email: Email del usuario (debe ser único)
-        password: Contraseña en texto plano (mín 8 caracteres)
-    
-    Returns:
-        User: Objeto usuario creado
-    
-    Raises:
-        ValueError: Si el email ya existe
-    """
-    if len(password) < 8:
-        raise ValueError("Contraseña debe tener mínimo 8 caracteres")
-    
-    hashed = hash_password(password)
-    return UserService.save_to_db(username, email, hashed)
-```
-
 ## 📂 Estructura de Carpetas - Por qué
 
 ```
@@ -470,7 +429,7 @@ services/      → Lógica de negocio (el "qué" y "cómo" hacer)
 ```
 1. Usuario se registra
    ↓
-2. Contraseña hasheada con bcrypt
+2. Contraseña hasheada con Argon2
    ↓
 3. Guardada en MySQL
    ↓
@@ -508,6 +467,30 @@ docker-compose restart mysql
 - Tokens JWT expiran en 30 minutos (configurable)
 - Haz login de nuevo para obtener nuevo token
 
+### Error IA: 401/403/404/502 en PokeChat
+- Contexto: las funciones de IA usan Vertex/Gemini REST con `VERTEX_API_KEY` y modelo `gemini-2.5-flash-lite`.
+
+#### 401 Unauthorized (API key inválida)
+- Verifica que `VERTEX_API_KEY` en `backend/.env` esté correcta y sin espacios extra.
+- Reinicia backend después de cambiar `.env`.
+
+#### 403 Permission Denied (API deshabilitada o sin permisos)
+- Habilita Gemini API en tu proyecto de Google Cloud:
+   https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview
+- Confirma que la API key pertenezca al mismo proyecto.
+
+#### 404 Model not found
+- Verifica que `VERTEX_MODEL=gemini-2.5-flash-lite` en `backend/.env`.
+- No uses modelos antiguos en `v1beta` que no soporten `generateContent`.
+
+#### 502 Bad Gateway en frontend
+- El backend devuelve 502 cuando falla la llamada al proveedor IA.
+- Revisa logs del backend para ver el error real de Gemini (401/403/404).
+- Prueba rápida desde terminal:
+```bash
+python -c "import requests;print(requests.post('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=TU_API_KEY',json={'contents':[{'parts':[{'text':'hello'}]}]}).status_code)"
+```
+
 ### Puerto ya en uso
 ```bash
 # Cambiar puerto en docker-compose.yml o:
@@ -521,4 +504,3 @@ docker-compose down
 - **React**: https://es.react.dev
 - **Tailwind CSS**: https://tailwindcss.com
 
----

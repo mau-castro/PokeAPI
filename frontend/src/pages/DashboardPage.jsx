@@ -14,12 +14,12 @@ export const DashboardPage = () => {
   const t = translations[language]
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">🔍 {t.dashboard.title}</h1>
-          <p className="text-gray-600">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-slate-100 mb-2">🔍 {t.dashboard.title}</h1>
+          <p className="text-gray-600 dark:text-slate-300">
             {t.dashboard.subtitle}
           </p>
         </div>

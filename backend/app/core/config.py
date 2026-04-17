@@ -25,8 +25,8 @@ class Settings(BaseSettings):
         ACCESS_TOKEN_EXPIRE_MINUTES: Expiracion del token
         DEBUG: Bandera de modo debug
         POKEAPI_BASE_URL: URL base de PokéAPI
-        CLAUDE_API_KEY: API key de Claude AI
-        CLAUDE_MODEL: Identificador del modelo Claude
+        VERTEX_API_KEY: API key para Vertex/Gemini
+        VERTEX_MODEL: Identificador del modelo multimodal
     """
     
     # Configuracion de base de datos
@@ -47,8 +47,8 @@ class Settings(BaseSettings):
     
     # APIs externas
     POKEAPI_BASE_URL: str = "https://pokeapi.co/api/v2"
-    CLAUDE_API_KEY: Optional[str] = None
-    CLAUDE_MODEL: str = "claude-3-5-sonnet-20241022"
+    VERTEX_API_KEY: Optional[str] = None
+    VERTEX_MODEL: str = "gemini-2.5-flash-lite"
     
     class Config:
         env_file = ".env"

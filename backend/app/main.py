@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.core.database import init_db
-from app.api import auth, pokemon, favorites
+from app.api import auth, pokemon, favorites, ai
 
 
 def create_app() -> FastAPI:
@@ -54,6 +54,7 @@ def create_app() -> FastAPI:
     app.include_router(auth.router)
     app.include_router(pokemon.router)
     app.include_router(favorites.router)
+    app.include_router(ai.router)
     
     # Manejadores globales de excepciones
     @app.exception_handler(Exception)

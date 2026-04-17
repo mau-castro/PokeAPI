@@ -293,7 +293,7 @@ export const PokemonSearch = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder={t.pokemonSearch.placeholder}
-            className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+            className="flex-1 px-4 py-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100 placeholder:text-gray-400 dark:placeholder:text-slate-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
           />
         </div>
       </div>
@@ -302,19 +302,19 @@ export const PokemonSearch = () => {
       {!isListCollapsed && (
       <section className="mb-10 animate-fade-slide-up">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-bold text-gray-900">{t.pokemonSearch.listTitle}</h3>
+          <h3 className="text-xl font-bold text-gray-900 dark:text-slate-100">{t.pokemonSearch.listTitle}</h3>
           <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1 || listLoading || isFilterPending}
-              className="px-2 py-1 rounded-md border border-gray-300 text-gray-700 text-xs sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+              className="px-2 py-1 rounded-md border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-200 text-xs sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-slate-800"
               aria-label={t.pokemonSearch.prev}
             >
               {t.pokemonSearch.prev}
             </button>
 
-            <p className="text-sm text-gray-600 min-w-24 text-center">
+            <p className="text-sm text-gray-600 dark:text-slate-300 min-w-24 text-center">
               {t.pokemonSearch.page} {currentPage} {t.pokemonSearch.of} {totalPages}
             </p>
 
@@ -322,7 +322,7 @@ export const PokemonSearch = () => {
               type="button"
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage >= totalPages || listLoading || isFilterPending}
-              className="px-2 py-1 rounded-md border border-gray-300 text-gray-700 text-xs sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+              className="px-2 py-1 rounded-md border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-200 text-xs sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-slate-800"
               aria-label={t.pokemonSearch.next}
             >
               {t.pokemonSearch.next}
@@ -335,14 +335,14 @@ export const PokemonSearch = () => {
             <div className="pokedex-slider-track">
               <div className="pokedex-slider-thumb" />
             </div>
-            <p className="mt-2 text-sm text-gray-600 text-center lowercase">
+            <p className="mt-2 text-sm text-gray-600 dark:text-slate-300 text-center lowercase">
               buscando en los confines de la pokedex
             </p>
           </div>
         )}
 
         {!listLoading && !isFilterPending && isCatalogSyncing && (
-          <p className="mb-4 text-xs text-gray-500 text-center">
+          <p className="mb-4 text-xs text-gray-500 dark:text-slate-400 text-center">
             Sincronizando m\u00e1s Pok\u00e9mon en segundo plano...
           </p>
         )}
@@ -354,7 +354,7 @@ export const PokemonSearch = () => {
         )}
 
         {!listLoading && !isFilterPending && !listError && pokemonList.length === 0 && (
-          <div className="mb-4 p-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 text-sm">
+          <div className="mb-4 p-3 bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-lg text-gray-700 dark:text-slate-200 text-sm">
             {t.pokemonSearch.noResults}
           </div>
         )}
@@ -365,12 +365,12 @@ export const PokemonSearch = () => {
               key={item.id}
               type="button"
               onClick={() => handleCardClick(item.name)}
-              className="bg-white border border-gray-200 rounded-xl p-3 text-center hover:shadow-md hover:border-red-300 transition"
+              className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-3 text-center hover:shadow-md hover:border-red-300 transition"
               title={t.pokemonSearch.cardTitle.replace('{name}', item.name)}
             >
               {cardImageErrors[item.id] ? (
                 <div className="w-20 h-20 mx-auto mb-2 rounded-lg bg-gray-100 border border-gray-200 px-1 flex items-center justify-center">
-                  <p className="text-[10px] leading-tight text-gray-600 font-medium text-center">
+                  <p className="text-[10px] leading-tight text-gray-600 dark:text-slate-300 font-medium text-center">
                     PokeAPI no tiene la Imagen
                   </p>
                 </div>
@@ -382,10 +382,10 @@ export const PokemonSearch = () => {
                   className="w-20 h-20 mx-auto mb-2 object-contain"
                 />
               )}
-              <p className="text-xs font-semibold text-gray-500 mb-1">
+              <p className="text-xs font-semibold text-gray-500 dark:text-slate-400 mb-1">
                 #{String(item.id).padStart(3, '0')}
               </p>
-              <p className="text-sm font-semibold text-gray-800 capitalize">{item.name}</p>
+              <p className="text-sm font-semibold text-gray-800 dark:text-slate-100 capitalize">{item.name}</p>
             </button>
           ))}
         </div>
@@ -395,12 +395,12 @@ export const PokemonSearch = () => {
             type="button"
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
             disabled={currentPage === 1 || listLoading}
-            className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+            className="px-4 py-2 rounded-lg border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-slate-800"
           >
             {t.pokemonSearch.prev}
           </button>
 
-          <span className="text-sm text-gray-700">
+          <span className="text-sm text-gray-700 dark:text-slate-200">
             {currentPage} / {totalPages}
           </span>
 
@@ -408,7 +408,7 @@ export const PokemonSearch = () => {
             type="button"
             onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
             disabled={currentPage >= totalPages || listLoading}
-            className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+            className="px-4 py-2 rounded-lg border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-slate-800"
           >
             {t.pokemonSearch.next}
           </button>

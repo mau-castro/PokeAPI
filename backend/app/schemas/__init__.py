@@ -97,3 +97,35 @@ class ErrorResponse(BaseModel):
     """Esquema estandar de respuesta de error."""
     detail: str
     error_code: Optional[str] = None
+
+
+# ============================================================================
+# Esquemas de AI bonus
+# ============================================================================
+
+class AIImageAnalysisResponse(BaseModel):
+    """Respuesta del analisis de imagen con modelo multimodal."""
+    detected_pokemon: Optional[str] = None
+    characteristics: list[str] = []
+    confidence_note: str = ""
+    raw_response: str = ""
+
+
+class AIChatRequest(BaseModel):
+    """Entrada para chat con contexto."""
+    message: str = Field(..., min_length=1, max_length=2000)
+    session_id: Optional[str] = None
+
+
+class AIChatResponse(BaseModel):
+    """Salida del chat con contexto."""
+    session_id: str
+    reply: str
+    context_size: int
+
+
+class AIRecommendationsResponse(BaseModel):
+    """Respuesta de recomendaciones inteligentes."""
+    suggestions: list[str] = []
+    summary: str = ""
+    raw_response: str = ""

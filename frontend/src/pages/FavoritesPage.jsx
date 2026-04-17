@@ -102,12 +102,12 @@ export const FavoritesPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">❤️ {t.favorites.title}</h1>
-          <p className="text-gray-600">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-slate-100 mb-2">❤️ {t.favorites.title}</h1>
+          <p className="text-gray-600 dark:text-slate-300">
             {t.favorites.countPrefix} <strong>{count}</strong> {t.favorites.countSuffix}
           </p>
         </div>
@@ -118,7 +118,7 @@ export const FavoritesPage = () => {
             <div className="inline-block animate-pulse-slow">
               <img src="/pokeball.svg" alt="Pokeball logo" className="w-16 h-16" />
             </div>
-            <p className="mt-4 text-gray-600">{t.favorites.loading}</p>
+            <p className="mt-4 text-gray-600 dark:text-slate-300">{t.favorites.loading}</p>
           </div>
         )}
 
@@ -131,10 +131,10 @@ export const FavoritesPage = () => {
 
         {/* Empty State */}
         {!loading && favorites.length === 0 && !error && (
-          <div className="text-center py-12 bg-white rounded-lg shadow">
+          <div className="text-center py-12 bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-lg shadow">
             <div className="text-6xl mb-4">🎯</div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">{t.favorites.emptyTitle}</h2>
-            <p className="text-gray-600 mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-slate-100 mb-2">{t.favorites.emptyTitle}</h2>
+            <p className="text-gray-600 dark:text-slate-300 mb-6">
               {t.favorites.emptyText}
             </p>
             <a
@@ -152,14 +152,14 @@ export const FavoritesPage = () => {
             {favorites.map((favorite) => (
               <div
                 key={favorite.id}
-                className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition cursor-pointer"
+                className="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition cursor-pointer"
                 onClick={() => handleOpenDetail(favorite)}
               >
                 <div className="p-6">
                   <div className="flex justify-center mb-4">
                     {cardImageErrors[favorite.pokemon_id] ? (
-                      <div className="w-24 h-24 rounded-lg bg-gray-100 border border-gray-200 px-2 flex items-center justify-center">
-                        <p className="text-[10px] leading-tight text-gray-600 font-medium text-center">
+                      <div className="w-24 h-24 rounded-lg bg-gray-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-600 px-2 flex items-center justify-center">
+                        <p className="text-[10px] leading-tight text-gray-600 dark:text-slate-300 font-medium text-center">
                           PokeAPI no tiene la Imagen
                         </p>
                       </div>
@@ -176,10 +176,10 @@ export const FavoritesPage = () => {
 
                   <div className="flex justify-between items-start mb-4">
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900 capitalize">
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-slate-100 capitalize">
                         {favorite.pokemon_name}
                       </h3>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-600 dark:text-slate-300">
                         {t.favorites.added}{' '}
                         {new Date(favorite.added_at).toLocaleDateString(
                           language === 'es' ? 'es-ES' : 'en-US'
@@ -199,7 +199,7 @@ export const FavoritesPage = () => {
                     </button>
                   </div>
 
-                  <div className="flex items-center justify-between text-sm text-gray-600">
+                  <div className="flex items-center justify-between text-sm text-gray-600 dark:text-slate-300">
                     <span>ID: #{favorite.pokemon_id}</span>
                     <span className="text-blue-600 font-medium">{t.favorites.viewDetails} →</span>
                   </div>
@@ -210,24 +210,24 @@ export const FavoritesPage = () => {
         )}
 
         {!loading && detailLoading && (
-          <div className="text-center py-12 bg-white rounded-lg shadow">
+          <div className="text-center py-12 bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-lg shadow">
             <div className="inline-block animate-pulse-slow">
               <span className="text-5xl">🔎</span>
             </div>
-            <p className="mt-4 text-gray-600">{t.favorites.loadingDetail}</p>
+            <p className="mt-4 text-gray-600 dark:text-slate-300">{t.favorites.loadingDetail}</p>
           </div>
         )}
 
         {!loading && selectedPokemon && (
           <div
-            className={`relative bg-white rounded-xl shadow-lg overflow-hidden ${
+            className={`relative bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-xl shadow-lg overflow-hidden ${
               isClosingDetail ? 'animate-fade-slide-out' : 'animate-fade-slide-in'
             }`}
           >
             <button
               type="button"
               onClick={handleCloseDetail}
-              className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-white border border-gray-300 text-gray-700 text-xl leading-none hover:bg-gray-100 transition"
+              className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-200 text-xl leading-none hover:bg-gray-100 dark:hover:bg-slate-700 transition"
               title={t.favorites.closeDetails}
               aria-label={t.favorites.closeDetails}
             >
@@ -235,7 +235,7 @@ export const FavoritesPage = () => {
             </button>
 
             <div className="grid md:grid-cols-2 gap-8 p-8">
-              <div className="flex flex-col items-center justify-center bg-gray-50 rounded-lg p-8">
+              <div className="flex flex-col items-center justify-center bg-gray-50 dark:bg-slate-800 rounded-lg p-8">
                 {selectedPokemon.image_url && !detailImageError ? (
                   <img
                     src={selectedPokemon.image_url}
@@ -244,8 +244,8 @@ export const FavoritesPage = () => {
                     className="max-w-xs h-auto object-contain"
                   />
                 ) : (
-                  <div className="max-w-xs w-full rounded-xl bg-gray-100 border border-gray-200 p-6">
-                    <p className="text-base text-gray-700 font-semibold text-center">
+                  <div className="max-w-xs w-full rounded-xl bg-gray-100 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 p-6">
+                    <p className="text-base text-gray-700 dark:text-slate-100 font-semibold text-center">
                       PokeAPI no tiene la Imagen
                     </p>
                   </div>
@@ -253,7 +253,7 @@ export const FavoritesPage = () => {
               </div>
 
               <div>
-                <h2 className="text-4xl font-bold text-gray-900 mb-4 capitalize">{selectedPokemon.name}</h2>
+                <h2 className="text-4xl font-bold text-gray-900 dark:text-slate-100 mb-4 capitalize">{selectedPokemon.name}</h2>
 
                 <div className="flex gap-2 mb-6">
                   {selectedPokemon.types.map((type) => (
@@ -266,30 +266,30 @@ export const FavoritesPage = () => {
                   ))}
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 mb-6 pb-6 border-b border-gray-200">
+                <div className="grid grid-cols-2 gap-4 mb-6 pb-6 border-b border-gray-200 dark:border-slate-700">
                   <div>
-                    <p className="text-gray-600 text-sm">ID</p>
-                    <p className="text-2xl font-bold text-gray-900">#{selectedPokemon.id}</p>
+                    <p className="text-gray-600 dark:text-slate-300 text-sm">ID</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-slate-100">#{selectedPokemon.id}</p>
                   </div>
                   <div>
-                    <p className="text-gray-600 text-sm">{t.pokemonSearch.height}</p>
-                    <p className="text-2xl font-bold text-gray-900">{(selectedPokemon.height / 10).toFixed(1)}m</p>
+                    <p className="text-gray-600 dark:text-slate-300 text-sm">{t.pokemonSearch.height}</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-slate-100">{(selectedPokemon.height / 10).toFixed(1)}m</p>
                   </div>
                   <div>
-                    <p className="text-gray-600 text-sm">{t.pokemonSearch.weight}</p>
-                    <p className="text-2xl font-bold text-gray-900">{(selectedPokemon.weight / 10).toFixed(1)}kg</p>
+                    <p className="text-gray-600 dark:text-slate-300 text-sm">{t.pokemonSearch.weight}</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-slate-100">{(selectedPokemon.weight / 10).toFixed(1)}kg</p>
                   </div>
                   {selectedPokemon.base_experience && (
                     <div>
-                      <p className="text-gray-600 text-sm">{t.pokemonSearch.experience}</p>
-                      <p className="text-2xl font-bold text-gray-900">{selectedPokemon.base_experience}</p>
+                      <p className="text-gray-600 dark:text-slate-300 text-sm">{t.pokemonSearch.experience}</p>
+                      <p className="text-2xl font-bold text-gray-900 dark:text-slate-100">{selectedPokemon.base_experience}</p>
                     </div>
                   )}
                 </div>
 
                 {selectedPokemon.abilities.length > 0 && (
                   <div className="mb-6">
-                    <h3 className="text-lg font-bold text-gray-900 mb-3">{t.pokemonSearch.abilities}</h3>
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-slate-100 mb-3">{t.pokemonSearch.abilities}</h3>
                     <div className="flex flex-wrap gap-2">
                       {selectedPokemon.abilities.map((ability) => (
                         <span
@@ -314,16 +314,16 @@ export const FavoritesPage = () => {
             </div>
 
             {Object.keys(selectedPokemon.stats).length > 0 && (
-              <div className="px-8 py-6 bg-gray-50 border-t border-gray-200">
-                <h3 className="text-lg font-bold text-gray-900 mb-4">{t.pokemonSearch.stats}</h3>
+              <div className="px-8 py-6 bg-gray-50 dark:bg-slate-800 border-t border-gray-200 dark:border-slate-700">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-slate-100 mb-4">{t.pokemonSearch.stats}</h3>
                 <div className="space-y-3">
                   {Object.entries(selectedPokemon.stats).map(([stat, value]) => (
                     <div key={stat}>
                       <div className="flex justify-between mb-1">
-                        <span className="text-sm font-medium text-gray-700 capitalize">{stat}</span>
-                        <span className="text-sm font-bold text-gray-900">{value}</span>
+                        <span className="text-sm font-medium text-gray-700 dark:text-slate-300 capitalize">{stat}</span>
+                        <span className="text-sm font-bold text-gray-900 dark:text-slate-100">{value}</span>
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
                         <div
                           className="bg-gradient-to-r from-red-500 to-red-600 h-2 rounded-full transition-all duration-300"
                           style={{ width: `${Math.min((value / 150) * 100, 100)}%` }}
