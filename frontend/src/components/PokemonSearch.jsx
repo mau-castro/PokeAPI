@@ -331,13 +331,15 @@ export const PokemonSearch = () => {
         </div>
 
         {(listLoading || isFilterPending) && (
-          <div className="mb-4">
-            <div className="pokedex-slider-track">
-              <div className="pokedex-slider-thumb" />
+          <div className="mb-4 py-8 rounded-xl bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700">
+            <div className="flex flex-col items-center justify-center">
+              <div className="inline-block animate-pulse-slow">
+                <img src="/pokeball.svg" alt="Pokeball logo" className="w-14 h-14" />
+              </div>
+              <p className="mt-3 text-sm text-gray-600 dark:text-slate-300 text-center">
+                {listLoading ? t.pokemonSearch.listLoading : t.pokemonSearch.searching}
+              </p>
             </div>
-            <p className="mt-2 text-sm text-gray-600 dark:text-slate-300 text-center lowercase">
-              buscando en los confines de la pokedex
-            </p>
           </div>
         )}
 
@@ -425,10 +427,12 @@ export const PokemonSearch = () => {
 
       {/* Loader de apertura de detalle */}
       {loading && isListCollapsed && !pokemon && (
-        <div className="mb-8 bg-white rounded-xl shadow-lg p-10">
+        <div className="mb-8 text-center py-12 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl shadow-lg">
           <div className="flex flex-col items-center justify-center">
-            <div className="w-14 h-14 rounded-full border-4 border-gray-200 border-t-red-500 border-r-red-400 animate-spin" />
-            <p className="mt-4 text-sm text-gray-600 lowercase">{t.pokemonSearch.openingPokeball}</p>
+            <div className="inline-block animate-pulse-slow">
+              <img src="/pokeball.svg" alt="Pokeball logo" className="w-14 h-14" />
+            </div>
+            <p className="mt-4 text-sm text-gray-600 dark:text-slate-300 lowercase">{t.pokemonSearch.openingPokeball}</p>
           </div>
         </div>
       )}
@@ -436,7 +440,7 @@ export const PokemonSearch = () => {
       {/* Tarjeta de Pokemon */}
       {pokemon && (
         <div
-          className={`relative bg-white rounded-xl shadow-lg overflow-hidden ${
+          className={`relative bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl shadow-lg overflow-hidden ${
             isClosingDetail ? 'animate-fade-slide-out' : 'animate-fade-slide-in'
           }`}
         >
@@ -444,17 +448,27 @@ export const PokemonSearch = () => {
             <button
               type="button"
               onClick={handleCloseDetail}
-              className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-white border border-gray-300 text-gray-700 text-xl leading-none hover:bg-gray-100 transition"
+              className="absolute top-4 right-4 z-10 inline-flex items-center justify-center w-9 h-9 rounded-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition"
               title={t.pokemonSearch.closeDetails}
               aria-label={t.pokemonSearch.closeDetails}
             >
-              ×
+              <svg
+                viewBox="0 0 24 24"
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                aria-hidden="true"
+              >
+                <path d="M6 6l12 12M18 6 6 18" />
+              </svg>
             </button>
           )}
 
           <div className="grid md:grid-cols-2 gap-8 p-8">
             {/* Seccion de imagen */}
-            <div className="flex flex-col items-center justify-center bg-gray-50 rounded-lg p-8">
+            <div className="flex flex-col items-center justify-center bg-gray-50 dark:bg-slate-800 rounded-lg p-8">
               {pokemon.image_url && !detailImageError ? (
                 <img
                   src={pokemon.image_url}
@@ -463,8 +477,8 @@ export const PokemonSearch = () => {
                   className="max-w-xs h-auto object-contain"
                 />
               ) : (
-                <div className="max-w-xs w-full rounded-xl bg-gray-100 border border-gray-200 p-6">
-                  <p className="text-base text-gray-700 font-semibold text-center">
+                <div className="max-w-xs w-full rounded-xl bg-gray-100 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 p-6">
+                  <p className="text-base text-gray-700 dark:text-slate-100 font-semibold text-center">
                     {t.pokemonSearch.imageUnavailable}
                   </p>
                 </div>
@@ -474,7 +488,7 @@ export const PokemonSearch = () => {
             {/* Seccion de detalles */}
             <div>
               {/* Nombre */}
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">{pokemon.name}</h2>
+              <h2 className="text-4xl font-bold text-gray-900 dark:text-slate-100 mb-4">{pokemon.name}</h2>
 
               {/* Tipos */}
               <div className="flex gap-2 mb-6">
@@ -489,23 +503,23 @@ export const PokemonSearch = () => {
               </div>
 
               {/* Cuadricula de informacion basica */}
-              <div className="grid grid-cols-2 gap-4 mb-6 pb-6 border-b border-gray-200">
+              <div className="grid grid-cols-2 gap-4 mb-6 pb-6 border-b border-gray-200 dark:border-slate-700">
                 <div>
-                  <p className="text-gray-600 text-sm">ID</p>
-                  <p className="text-2xl font-bold text-gray-900">#{pokemon.id}</p>
+                  <p className="text-gray-600 dark:text-slate-300 text-sm">ID</p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-slate-100">#{pokemon.id}</p>
                 </div>
                 <div>
-                  <p className="text-gray-600 text-sm">{t.pokemonSearch.height}</p>
-                  <p className="text-2xl font-bold text-gray-900">{(pokemon.height / 10).toFixed(1)}m</p>
+                  <p className="text-gray-600 dark:text-slate-300 text-sm">{t.pokemonSearch.height}</p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-slate-100">{(pokemon.height / 10).toFixed(1)}m</p>
                 </div>
                 <div>
-                  <p className="text-gray-600 text-sm">{t.pokemonSearch.weight}</p>
-                  <p className="text-2xl font-bold text-gray-900">{(pokemon.weight / 10).toFixed(1)}kg</p>
+                  <p className="text-gray-600 dark:text-slate-300 text-sm">{t.pokemonSearch.weight}</p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-slate-100">{(pokemon.weight / 10).toFixed(1)}kg</p>
                 </div>
                 {pokemon.base_experience && (
                   <div>
-                    <p className="text-gray-600 text-sm">{t.pokemonSearch.experience}</p>
-                    <p className="text-2xl font-bold text-gray-900">{pokemon.base_experience}</p>
+                    <p className="text-gray-600 dark:text-slate-300 text-sm">{t.pokemonSearch.experience}</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-slate-100">{pokemon.base_experience}</p>
                   </div>
                 )}
               </div>
@@ -513,12 +527,12 @@ export const PokemonSearch = () => {
               {/* Abilities */}
               {pokemon.abilities.length > 0 && (
                 <div className="mb-6">
-                  <h3 className="text-lg font-bold text-gray-900 mb-3">{t.pokemonSearch.abilities}</h3>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-slate-100 mb-3">{t.pokemonSearch.abilities}</h3>
                   <div className="flex flex-wrap gap-2">
                     {pokemon.abilities.map((ability) => (
                       <span
                         key={ability}
-                        className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium"
+                        className="px-3 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium"
                       >
                         {ability}
                       </span>
@@ -550,16 +564,16 @@ export const PokemonSearch = () => {
 
           {/* Stats Section */}
           {Object.keys(pokemon.stats).length > 0 && (
-            <div className="px-8 py-6 bg-gray-50 border-t border-gray-200">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">{t.pokemonSearch.stats}</h3>
+            <div className="px-8 py-6 bg-gray-50 dark:bg-slate-800 border-t border-gray-200 dark:border-slate-700">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-slate-100 mb-4">{t.pokemonSearch.stats}</h3>
               <div className="space-y-3">
                 {Object.entries(pokemon.stats).map(([stat, value]) => (
                   <div key={stat}>
                     <div className="flex justify-between mb-1">
-                      <span className="text-sm font-medium text-gray-700 capitalize">{stat}</span>
-                      <span className="text-sm font-bold text-gray-900">{value}</span>
+                      <span className="text-sm font-medium text-gray-700 dark:text-slate-300 capitalize">{stat}</span>
+                      <span className="text-sm font-bold text-gray-900 dark:text-slate-100">{value}</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
                       <div
                         className="bg-gradient-to-r from-red-500 to-red-600 h-2 rounded-full transition-all duration-300"
                         style={{ width: `${Math.min((value / 150) * 100, 100)}%` }}

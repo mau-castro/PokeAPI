@@ -213,7 +213,7 @@ export const FavoritesPage = () => {
         {!loading && detailLoading && (
           <div className="text-center py-12 bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-lg shadow">
             <div className="inline-block animate-pulse-slow">
-              <span className="text-5xl">🔎</span>
+              <img src="/pokeball.svg" alt="Pokeball logo" className="w-14 h-14" />
             </div>
             <p className="mt-4 text-gray-600 dark:text-slate-300">{t.favorites.loadingDetail}</p>
           </div>
@@ -228,11 +228,21 @@ export const FavoritesPage = () => {
             <button
               type="button"
               onClick={handleCloseDetail}
-              className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-200 text-xl leading-none hover:bg-gray-100 dark:hover:bg-slate-700 transition"
+              className="absolute top-4 right-4 z-10 inline-flex items-center justify-center w-9 h-9 rounded-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition"
               title={t.favorites.closeDetails}
               aria-label={t.favorites.closeDetails}
             >
-              ×
+              <svg
+                viewBox="0 0 24 24"
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                aria-hidden="true"
+              >
+                <path d="M6 6l12 12M18 6 6 18" />
+              </svg>
             </button>
 
             <div className="grid md:grid-cols-2 gap-8 p-8">
