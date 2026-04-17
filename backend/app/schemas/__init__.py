@@ -1,0 +1,99 @@
+"""
+Esquemas Pydantic para validacion y serializacion de request/response.
+
+Estos esquemas manejan validacion de datos, serializacion y documentacion de API.
+"""
+
+from pydantic import BaseModel, EmailStr, Field
+from datetime import datetime
+from typing import Optional
+
+
+# ============================================================================
+# Esquemas de autenticacion
+# ============================================================================
+
+class UserBase(BaseModel):
+    """Esquema base de usuario con campos comunes."""
+    username: str = Field(..., min_length=3, max_length=50)
+    email: EmailStr
+
+
+class UserCreate(UserBase):
+    """Esquema para registro de usuario."""
+    password: str = Field(..., min_length=8)
+
+
+class UserLogin(BaseModel):
+    """Esquema para credenciales de inicio de sesion."""
+    email: EmailStr
+    password: str
+
+
+class UserResponse(UserBase):
+    """Esquema para respuesta de usuario (sin datos sensibles)."""
+    id: int
+    is_active: bool
+    created_at: datetime
+    
+    class Config:
+        from_attributes = True
+
+
+class Token(BaseModel):
+    """Esquema para respuesta con token JWT."""
+    access_token: str
+    token_type: str = "bearer"
+
+
+# ============================================================================
+# Esquemas de Pokemon
+# ============================================================================
+
+class PokemonBaseInfo(BaseModel):
+    """Informacion base de un Pokemon desde PokéAPI."""
+    id: int
+    name: str
+    height: int
+    weight: int
+    base_experience: Optional[int] = None
+    is_default: Optional[bool] = None
+    
+    class Config:
+        from_attributes = True
+
+
+class PokemonDetail(PokemonBaseInfo):
+    """Informacion detallada de un Pokemon."""
+    image_url: Optional[str] = None
+    types: list[str] = []
+    stats: dict = {}
+    abilities: list[str] = []
+
+
+class PokemonFavoriteCreate(BaseModel):
+    """Esquema para agregar un Pokemon a favoritos."""
+    pokemon_id: int
+    pokemon_name: str
+
+
+class PokemonFavoriteResponse(BaseModel):
+    """Esquema para respuesta de Pokemon favorito."""
+    id: int
+    user_id: int
+    pokemon_id: int
+    pokemon_name: str
+    added_at: datetime
+    
+    class Config:
+        from_attributes = True
+
+
+# ============================================================================
+# Esquemas de error
+# ============================================================================
+
+class ErrorResponse(BaseModel):
+    """Esquema estandar de respuesta de error."""
+    detail: str
+    error_code: Optional[str] = None

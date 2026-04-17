@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Pokeball">
+  <defs>
+    <linearGradient id="topRed" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ff5b52"/>
+      <stop offset="100%" stop-color="#ef3b32"/>
+    </linearGradient>
+    <linearGradient id="bottomWhite" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e5e7eb"/>
+    </linearGradient>
+  </defs>
+
+  <circle cx="256" cy="256" r="246" fill="#1f1f23"/>
+  <path d="M 22 256 A 234 234 0 0 1 490 256 L 490 256 L 22 256 Z" fill="url(#topRed)"/>
+  <path d="M 22 256 A 234 234 0 0 0 490 256 L 490 256 L 22 256 Z" fill="url(#bottomWhite)"/>
+
+  <rect x="22" y="232" width="468" height="48" fill="#3f3f46"/>
+
+  <circle cx="256" cy="256" r="84" fill="#1f1f23"/>
+  <circle cx="256" cy="256" r="70" fill="#f4f4f5"/>
+  <circle cx="256" cy="256" r="44" fill="#ffffff"/>
+  <circle cx="256" cy="256" r="42" fill="none" stroke="#d4d4d8" stroke-width="6"/>
+
+  <ellipse cx="168" cy="132" rx="58" ry="40" fill="#ffffff" opacity="0.85" transform="rotate(-24 168 132)"/>
+</svg>
