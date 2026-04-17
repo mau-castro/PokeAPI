@@ -514,20 +514,6 @@ docker-compose restart mysql
 docker-compose down
 ```
 
-## 📈 Próximos Pasos
-
-### Bonus Features (Preparados pero no implementados aún)
-- 🎨 Claude Vision para reconocimiento de cartas Pokémon
-- 🧠 MCP (Model Context Protocol) para conversaciones IA
-- 📊 Analytics y estadísticas de colección
-
-### Para Producción
-- 🔒 HTTPS/SSL Certificate
-- 📦 CI/CD Pipeline (GitHub Actions)
-- 📡 Monitoreo (Sentry, UptimeRobot)
-- 💾 Backups automáticos
-- 🚀 Deployment (AWS, Heroku, DigitalOcean)
-
 ## 📞 Recursos
 
 - **PokéAPI Docs**: https://pokeapi.co/docs/v2
@@ -536,13 +522,3 @@ docker-compose down
 - **Tailwind CSS**: https://tailwindcss.com
 
 ---
-
-**Hecho con ❤️ para demostrar Clean Code y buenas prácticas**
-
-Puntos clave para la entrevista:
-- ✅ Clean Code: código legible y mantenible
-- ✅ SOLID: principios de diseño aplicados
-- ✅ Arquitectura: capas bien definidas
-- ✅ Testing: pruebas incluidas
-- ✅ DevOps: Docker Compose listo
-- ✅ Documentación: clara y profesional
