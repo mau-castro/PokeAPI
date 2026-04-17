@@ -5,7 +5,7 @@ Este modulo maneja la configuracion desde variables de entorno,
 usando Pydantic para validacion y seguridad de tipos.
 """
 
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import Optional
 
 
@@ -50,9 +50,7 @@ class Settings(BaseSettings):
     VERTEX_API_KEY: Optional[str] = None
     VERTEX_MODEL: str = "gemini-2.5-flash-lite"
     
-    class Config:
-        env_file = ".env"
-        case_sensitive = True
+    model_config = SettingsConfigDict(env_file=".env", case_sensitive=True)
 
 
 # Instancia global de configuracion

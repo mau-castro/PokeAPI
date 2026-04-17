@@ -343,7 +343,7 @@ export const PokemonSearch = () => {
 
         {!listLoading && !isFilterPending && isCatalogSyncing && (
           <p className="mb-4 text-xs text-gray-500 dark:text-slate-400 text-center">
-            Sincronizando m\u00e1s Pok\u00e9mon en segundo plano...
+            {t.pokemonSearch.syncingCatalog}
           </p>
         )}
 
@@ -371,7 +371,7 @@ export const PokemonSearch = () => {
               {cardImageErrors[item.id] ? (
                 <div className="w-20 h-20 mx-auto mb-2 rounded-lg bg-gray-100 border border-gray-200 px-1 flex items-center justify-center">
                   <p className="text-[10px] leading-tight text-gray-600 dark:text-slate-300 font-medium text-center">
-                    PokeAPI no tiene la Imagen
+                    {t.pokemonSearch.imageUnavailable}
                   </p>
                 </div>
               ) : (
@@ -465,7 +465,7 @@ export const PokemonSearch = () => {
               ) : (
                 <div className="max-w-xs w-full rounded-xl bg-gray-100 border border-gray-200 p-6">
                   <p className="text-base text-gray-700 font-semibold text-center">
-                    PokeAPI no tiene la Imagen
+                    {t.pokemonSearch.imageUnavailable}
                   </p>
                 </div>
               )}

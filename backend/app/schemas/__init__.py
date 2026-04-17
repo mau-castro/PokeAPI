@@ -4,7 +4,7 @@ Esquemas Pydantic para validacion y serializacion de request/response.
 Estos esquemas manejan validacion de datos, serializacion y documentacion de API.
 """
 
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 from datetime import datetime
 from typing import Optional
 
@@ -36,8 +36,7 @@ class UserResponse(UserBase):
     is_active: bool
     created_at: datetime
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class Token(BaseModel):
@@ -59,16 +58,15 @@ class PokemonBaseInfo(BaseModel):
     base_experience: Optional[int] = None
     is_default: Optional[bool] = None
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class PokemonDetail(PokemonBaseInfo):
     """Informacion detallada de un Pokemon."""
     image_url: Optional[str] = None
-    types: list[str] = []
-    stats: dict = {}
-    abilities: list[str] = []
+    types: list[str] = Field(default_factory=list)
+    stats: dict = Field(default_factory=dict)
+    abilities: list[str] = Field(default_factory=list)
 
 
 class PokemonFavoriteCreate(BaseModel):
@@ -85,8 +83,7 @@ class PokemonFavoriteResponse(BaseModel):
     pokemon_name: str
     added_at: datetime
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # ============================================================================
@@ -106,7 +103,7 @@ class ErrorResponse(BaseModel):
 class AIImageAnalysisResponse(BaseModel):
     """Respuesta del analisis de imagen con modelo multimodal."""
     detected_pokemon: Optional[str] = None
-    characteristics: list[str] = []
+    characteristics: list[str] = Field(default_factory=list)
     confidence_note: str = ""
     raw_response: str = ""
 
@@ -132,6 +129,6 @@ class AIRecommendationItem(BaseModel):
 
 class AIRecommendationsResponse(BaseModel):
     """Respuesta de recomendaciones inteligentes."""
-    suggestions: list[AIRecommendationItem] = []
+    suggestions: list[AIRecommendationItem] = Field(default_factory=list)
     summary: str = ""
     raw_response: str = ""

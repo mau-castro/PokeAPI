@@ -8,7 +8,6 @@ from sqlalchemy.orm import Session
 from typing import List, Optional
 
 from app.models import PokemonFavorite
-from app.schemas import PokemonFavoriteResponse
 
 
 class FavoriteService:

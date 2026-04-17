@@ -3,7 +3,6 @@ export const translations = {
     navbar: {
       dashboard: 'Dashboard',
       favorites: 'Favoritos',
-      aiIntegration: 'Integracion de IA',
       pokeChat: 'PokeChat',
       pokeAnalysis: 'PokeAnalysis',
       pokeRecommend: 'PokeRecommend',
@@ -74,10 +73,6 @@ export const translations = {
       title: 'Buscar Pokemon',
       subtitle: 'Encuentra cualquier Pokemon y revisa su informacion detallada',
     },
-    aiIntegration: {
-      title: 'Integracion de IA',
-      subtitle: 'Analisis multimodal, chat con contexto y recomendaciones inteligentes.',
-    },
     aiSections: {
       pokeChatTitle: 'PokeChat: El chat de pokemon',
       pokeChatSubtitle: 'Conversa con IA sobre tus Pokemon y tu coleccion.',
@@ -85,6 +80,11 @@ export const translations = {
       pokeAnalysisSubtitle: 'Sube una imagen y deja que la IA la interprete.',
       pokeRecommendTitle: 'PokeRecommend: La recomendacion con IA',
       pokeRecommendSubtitle: 'Recibe sugerencias inteligentes segun tus favoritos.',
+      poweredBy: 'Potenciado con gemini-2.5-flash-lite via Vertex AI by Google',
+      contextChatTitle: '2) Chat con contexto',
+      contextChatEmpty: 'Sin mensajes todavia.',
+      contextChatPlaceholder: 'Pregunta sobre tu coleccion...',
+      chatFailed: 'No se pudo obtener respuesta del chat.',
       chatUi: {
         badge: 'PokeChat',
         title: 'PokeAssistant',
@@ -113,6 +113,7 @@ export const translations = {
       loadError: 'Error al cargar favoritos',
       removeError: 'Error al quitar favorito',
       detailError: 'Error al cargar el detalle del Pokemon',
+      imageUnavailable: 'PokeAPI no tiene la Imagen',
     },
     pokemonSearch: {
       placeholder: 'Buscar por nombre o ID de Pokemon...',
@@ -139,13 +140,14 @@ export const translations = {
       experience: 'Experiencia',
       abilities: 'Habilidades',
       stats: 'Estadisticas',
+      syncingCatalog: 'Sincronizando mas Pokemon en segundo plano...',
+      imageUnavailable: 'PokeAPI no tiene la Imagen',
     },
   },
   en: {
     navbar: {
       dashboard: 'Dashboard',
       favorites: 'Favorites',
-      aiIntegration: 'AI Integration',
       pokeChat: 'PokeChat',
       pokeAnalysis: 'PokeAnalysis',
       pokeRecommend: 'PokeRecommend',
@@ -216,10 +218,6 @@ export const translations = {
       title: 'Search Pokemon',
       subtitle: 'Find any Pokemon and view detailed information',
     },
-    aiIntegration: {
-      title: 'AI Integration',
-      subtitle: 'Multimodal analysis, contextual chat, and smart recommendations.',
-    },
     aiSections: {
       pokeChatTitle: 'PokeChat: The Pokemon chat',
       pokeChatSubtitle: 'Talk with AI about your Pokemon and collection.',
@@ -227,6 +225,11 @@ export const translations = {
       pokeAnalysisSubtitle: 'Upload an image and let AI analyze it.',
       pokeRecommendTitle: 'PokeRecommend: AI recommendations',
       pokeRecommendSubtitle: 'Get smart suggestions based on your favorites.',
+      poweredBy: 'Powered by gemini-2.5-flash-lite via Vertex AI by Google',
+      contextChatTitle: '2) Context chat',
+      contextChatEmpty: 'No messages yet.',
+      contextChatPlaceholder: 'Ask about your collection...',
+      chatFailed: 'Could not get a chat response.',
       chatUi: {
         badge: 'PokeChat',
         title: 'PokeAssistant',
@@ -255,6 +258,7 @@ export const translations = {
       loadError: 'Failed to load favorites',
       removeError: 'Failed to remove favorite',
       detailError: 'Failed to load Pokemon details',
+      imageUnavailable: 'PokeAPI has no image for this Pokemon',
     },
     pokemonSearch: {
       placeholder: 'Search by Pokemon name or ID...',
@@ -281,6 +285,8 @@ export const translations = {
       experience: 'Experience',
       abilities: 'Abilities',
       stats: 'Stats',
+      syncingCatalog: 'Syncing more Pokemon in the background...',
+      imageUnavailable: 'PokeAPI has no image for this Pokemon',
     },
   },
 }

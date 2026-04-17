@@ -5,6 +5,7 @@
  */
 
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { favoriteService, pokemonService } from '../services/api'
 import { useLanguage } from '../context/LanguageContext'
 import { translations } from '../i18n/translations'
@@ -137,12 +138,12 @@ export const FavoritesPage = () => {
             <p className="text-gray-600 dark:text-slate-300 mb-6">
               {t.favorites.emptyText}
             </p>
-            <a
-              href="/dashboard"
+            <Link
+              to="/dashboard"
               className="inline-block px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition"
             >
               {t.favorites.searchPokemon}
-            </a>
+            </Link>
           </div>
         )}
 
@@ -160,7 +161,7 @@ export const FavoritesPage = () => {
                     {cardImageErrors[favorite.pokemon_id] ? (
                       <div className="w-24 h-24 rounded-lg bg-gray-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-600 px-2 flex items-center justify-center">
                         <p className="text-[10px] leading-tight text-gray-600 dark:text-slate-300 font-medium text-center">
-                          PokeAPI no tiene la Imagen
+                          {t.favorites.imageUnavailable}
                         </p>
                       </div>
                     ) : (
@@ -246,7 +247,7 @@ export const FavoritesPage = () => {
                 ) : (
                   <div className="max-w-xs w-full rounded-xl bg-gray-100 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 p-6">
                     <p className="text-base text-gray-700 dark:text-slate-100 font-semibold text-center">
-                      PokeAPI no tiene la Imagen
+                      {t.favorites.imageUnavailable}
                     </p>
                   </div>
                 )}

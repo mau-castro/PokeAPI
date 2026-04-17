@@ -88,15 +88,21 @@ PokeAPI/
 │   │   ├── components/            # Componentes React
 │   │   │   ├── Navbar.jsx
 │   │   │   ├── PokemonSearch.jsx
+│   │   │   ├── AIBonusPanel.jsx
 │   │   │   └── ProtectedRoute.jsx
 │   │   ├── context/              # Context Providers
-│   │   │   └── AuthContext.jsx   # Estado de autenticación
+│   │   │   ├── AuthContext.jsx   # Estado de autenticación
+│   │   │   ├── LanguageContext.jsx
+│   │   │   └── ThemeContext.jsx
 │   │   ├── pages/                # Páginas
 │   │   │   ├── HomePage.jsx
 │   │   │   ├── LoginPage.jsx
 │   │   │   ├── RegisterPage.jsx
 │   │   │   ├── DashboardPage.jsx
-│   │   │   └── FavoritesPage.jsx
+│   │   │   ├── FavoritesPage.jsx
+│   │   │   ├── PokeChatPage.jsx
+│   │   │   ├── PokeAnalysisPage.jsx
+│   │   │   └── PokeRecommendPage.jsx
 │   │   ├── services/             # Cliente API
 │   │   │   └── api.js           # Configuración Axios
 │   │   └── App.jsx               # Componente Principal
@@ -107,7 +113,7 @@ PokeAPI/
 │   └── index.html                # Entry point HTML
 │
 ├── docker-compose.yml            # Orquestación de servicios
-└── README_ES.md                 # Este archivo
+└── README.md                    # Este archivo
 ```
 
 ## 🚀 Inicio Rápido
@@ -119,8 +125,8 @@ PokeAPI/
 cd PokeAPI
 
 # 2. Crear archivos .env desde templates
-cp backend/.env.example backend/.env
-cp frontend/.env.example frontend/.env
+cp backend/.env.example backend/.env # Edita las variables segun tu entorno (la configuración por defecto asume MySQL en localhost con puerto 3306)
+cp frontend/.env.example frontend/.env # Edita las variables si es necesario (la configuración por defecto asume localhost con puerto 8000)
 
 # 3. Iniciar aplicación
 docker-compose up --build
@@ -142,7 +148,7 @@ python -m venv venv
 # Mac/Linux: source venv/bin/activate
 
 pip install -r requirements.txt
-cp .env.example .env
+cp .env.example .env # Edita backend/.env con tu configuración (DB, secretos, etc) 
 python main.py
 ```
 
@@ -151,7 +157,7 @@ python main.py
 ```bash
 cd frontend
 npm install
-cp .env.example .env
+cp .env.example .env # Edita frontend/.env si es necesario (API URL)
 npm run dev
 ```
 
@@ -160,11 +166,15 @@ npm run dev
 ### Backend (.env)
 ```env
 # Base de Datos
-DB_HOST=localhost
-DB_USER=pokeuser
-DB_PASSWORD=password_seguro
-DB_NAME=pokedex_manager
-DB_PORT=3306
+# Opcion recomendada: URL unica de conexion
+DATABASE_URL=mysql+aiomysql://root:tu_password@localhost:3306/pokedex
+
+# Opcion alternativa (si no usas DATABASE_URL):
+# DB_HOST=localhost
+# DB_USER=root
+# DB_PASSWORD=tu_password
+# DB_NAME=pokedex
+# DB_PORT=3306
 
 # Seguridad
 SECRET_KEY=tu-llave-super-secreta-min-32-caracteres
@@ -266,6 +276,38 @@ http://localhost:8000
 
 #### GET /favorites/check/{pokemon_id}
 **Respuesta**: `{ "is_favorite": true }`
+
+### IA
+
+#### POST /ai/analyze-image
+**Headers**: `Authorization: Bearer {token}`
+
+**Form-data**:
+- `image`: archivo de imagen
+- `language`: `es` o `en` (opcional, por defecto `es`)
+
+#### POST /ai/chat
+**Headers**: `Authorization: Bearer {token}`
+
+```json
+{
+   "message": "Ayudame con un equipo tipo agua",
+   "session_id": "opcional"
+}
+```
+
+#### GET /ai/recommendations?language=es
+**Headers**: `Authorization: Bearer {token}`
+
+Respuesta (resumen):
+```json
+{
+   "suggestions": [
+      { "name": "Garchomp", "reason": "..." }
+   ],
+   "summary": "..."
+}
+```
 
 ### 📖 Documentación Interactiva
 **Swagger UI**: `http://localhost:8000/api/docs`

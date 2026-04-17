@@ -33,11 +33,15 @@ copy .env.example .env
 Configura `backend/.env` con estas variables mínimas:
 
 ```env
-DB_HOST=localhost
-DB_PORT=3306
-DB_USER=pokeuser
-DB_PASSWORD=securepassword
-DB_NAME=pokedex
+# Opcion recomendada: URL unica de conexion
+DATABASE_URL=mysql+aiomysql://root:tu_password@localhost:3306/pokedex
+
+# Opcion alternativa (si no usas DATABASE_URL):
+# DB_HOST=localhost
+# DB_PORT=3306
+# DB_USER=root
+# DB_PASSWORD=tu_password
+# DB_NAME=pokedex
 
 SECRET_KEY=tu-clave-segura-de-32-caracteres-o-mas
 ALGORITHM=HS256
@@ -95,7 +99,7 @@ Frontend: `http://localhost:5173`
 3. Buscar un Pokémon.
 4. Abrir detalle.
 5. Agregar y quitar favoritos.
-6. Probar "Bonus IA" en Dashboard (analisis de imagen, chat y recomendaciones).
+6. Probar las rutas IA: PokeChat, PokeAnalysis y PokeRecommend.
 
 ## Nota
 

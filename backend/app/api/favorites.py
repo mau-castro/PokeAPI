@@ -4,21 +4,20 @@ Endpoints de favoritos.
 Maneja la coleccion de Pokemon favoritos del usuario.
 """
 
-from fastapi import APIRouter, Depends, HTTPException, status, Header
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 
+from app.api.auth import get_current_user
 from app.core.database import get_db
-from app.core.security import decode_token
 from app.schemas import PokemonFavoriteCreate, PokemonFavoriteResponse
 from app.services.favorite_service import FavoriteService
-from app.services.user_service import UserService
 
 
 router = APIRouter(prefix="/favorites", tags=["favorites"])
 
 
-def get_current_user_id(authorization: str = Header(None), db: Session = Depends(get_db)):
+def get_current_user_id(current_user=Depends(get_current_user)):
     """
     Dependencia para extraer y validar el ID de usuario desde JWT.
     
@@ -32,38 +31,7 @@ def get_current_user_id(authorization: str = Header(None), db: Session = Depends
     Raises:
         HTTPException: Si el token es invalido o el usuario no existe
     """
-    if not authorization or " " not in authorization:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Authorization header missing",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    
-    _, token = authorization.split()
-    payload = decode_token(token)
-    
-    if not payload:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid token",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    
-    user_id = payload.get("sub")
-    if not user_id:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid token",
-        )
-    
-    user = UserService.get_user_by_id(db, int(user_id))
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found"
-        )
-    
-    return int(user_id)
+    return int(current_user.id)
 
 
 @router.post("/add", response_model=PokemonFavoriteResponse, status_code=status.HTTP_201_CREATED)

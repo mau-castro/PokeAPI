@@ -2,9 +2,12 @@
 Pruebas basicas para endpoints de autenticacion.
 """
 
+import os
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+
+os.environ["DATABASE_URL"] = "sqlite:///:memory:"
 
 from app.core.database import Base
 from app.services.user_service import UserService

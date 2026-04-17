@@ -7,6 +7,21 @@ import { aiService } from '../services/api'
 import { useLanguage } from '../context/LanguageContext'
 import { translations } from '../i18n/translations'
 
+const GeminiSparkIcon = () => (
+  <svg
+    viewBox="0 0 24 24"
+    className="w-4 h-4"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M12 2.5l1.9 5.2 5.6 1.9-5.6 1.9L12 16.7l-1.9-5.2-5.6-1.9 5.6-1.9L12 2.5Z" />
+  </svg>
+)
+
 export const AIBonusPanel = ({ section = 'all' }) => {
   const { language } = useLanguage()
   const t = translations[language]
@@ -143,7 +158,7 @@ export const AIBonusPanel = ({ section = 'all' }) => {
       ])
       setChatMessage('')
     } catch (error) {
-      setChatError(error.response?.data?.detail || 'No se pudo obtener respuesta del chat.')
+      setChatError(error.response?.data?.detail || t.aiSections.chatFailed)
     } finally {
       setChatLoading(false)
     }
@@ -234,6 +249,11 @@ export const AIBonusPanel = ({ section = 'all' }) => {
               {chatLoading ? chatUi.sending : chatUi.send}
             </button>
           </div>
+
+          <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-cyan-200 dark:border-cyan-800 bg-cyan-50 dark:bg-cyan-900/20 px-3 py-1 text-xs font-medium text-cyan-700 dark:text-cyan-300">
+            <GeminiSparkIcon />
+            <span>{t.aiSections.poweredBy}</span>
+          </div>
         </div>
       </section>
     )
@@ -317,11 +337,11 @@ export const AIBonusPanel = ({ section = 'all' }) => {
 
         {showChat && (
         <div className="border border-gray-200 dark:border-slate-700 rounded-lg p-4">
-          <h4 className="font-semibold text-gray-900 dark:text-slate-100 mb-3">2) Chat con contexto</h4>
+          <h4 className="font-semibold text-gray-900 dark:text-slate-100 mb-3">{t.aiSections.contextChatTitle}</h4>
 
           <div className="h-40 overflow-auto bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-md p-2 mb-3">
             {chatHistory.length === 0 ? (
-              <p className="text-xs text-gray-500 dark:text-slate-400">Sin mensajes todavia.</p>
+              <p className="text-xs text-gray-500 dark:text-slate-400">{t.aiSections.contextChatEmpty}</p>
             ) : (
               chatHistory.map((item, index) => (
                 <p key={`${item.role}-${index}`} className="text-sm mb-2 text-gray-800 dark:text-slate-100">
@@ -336,7 +356,7 @@ export const AIBonusPanel = ({ section = 'all' }) => {
               type="text"
               value={chatMessage}
               onChange={(event) => setChatMessage(event.target.value)}
-              placeholder="Pregunta sobre tu coleccion..."
+              placeholder={t.aiSections.contextChatPlaceholder}
               className="flex-1 px-3 py-2 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-md"
             />
             <button
@@ -395,6 +415,11 @@ export const AIBonusPanel = ({ section = 'all' }) => {
         )}
       </div>
       )}
+
+      <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-cyan-200 dark:border-cyan-800 bg-cyan-50 dark:bg-cyan-900/20 px-3 py-1 text-xs font-medium text-cyan-700 dark:text-cyan-300">
+        <GeminiSparkIcon />
+        <span>{t.aiSections.poweredBy}</span>
+      </div>
     </section>
   )
 }

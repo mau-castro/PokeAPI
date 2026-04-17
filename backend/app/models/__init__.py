@@ -15,9 +15,13 @@ from sqlalchemy import (
     Text,
     UniqueConstraint,
 )
-from datetime import datetime
+from datetime import UTC, datetime
 
 from app.core.database import Base
+
+
+def utc_now() -> datetime:
+    return datetime.now(UTC)
 
 
 class User(Base):
@@ -40,7 +44,7 @@ class User(Base):
     email = Column(String(100), unique=True, index=True, nullable=False)
     hashed_password = Column(String(255), nullable=False)
     is_active = Column(Boolean, default=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=utc_now)
     
     def __repr__(self) -> str:
         return f"<User(id={self.id}, username={self.username}, email={self.email})>"
@@ -64,7 +68,7 @@ class PokemonFavorite(Base):
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
     pokemon_id = Column(Integer, nullable=False)
     pokemon_name = Column(String(100), nullable=False)
-    added_at = Column(DateTime, default=datetime.utcnow)
+    added_at = Column(DateTime, default=utc_now)
     
     def __repr__(self) -> str:
         return (
@@ -94,8 +98,8 @@ class ChatSessionMemory(Base):
     preferences_json = Column(Text, nullable=False, default="[]")
     recent_turns_json = Column(Text, nullable=False, default="[]")
 
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime, default=utc_now, nullable=False)
+    updated_at = Column(DateTime, default=utc_now, onupdate=utc_now, nullable=False)
 
     def __repr__(self) -> str:
         return (
